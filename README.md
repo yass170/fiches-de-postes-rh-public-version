@@ -1,32 +1,111 @@
-# Fiches de postes RH — version publique
+# HR Job Profiles — Interview-to-Document Workflow
 
-Application consacrée à la gestion et à la préparation de fiches de postes pour les ressources humaines.
+An HR application that turns recorded interviews into structured job descriptions through transcription, synthesis, assisted drafting and human review.
 
-## Confidentialité et anonymisation
+HR teams can consolidate several interviews into one job profile while keeping source material, editable drafts, finalized versions and PDF output in the same workflow. Drafting assistance supports the reviewer; it does not replace the HR approval step.
 
-Ce dépôt est une présentation publique de la structure du projet. **Tous les contenus d’origine des fichiers conservés ont été supprimés pour des raisons de confidentialité.** Les fichiers de code, de configuration, de migration SQL, de tests, de gouvernance et les artefacts d’ingénierie conservés contiennent uniquement la phrase « Contenu anonymisé ». Cette règle s’applique aussi aux exemples et aux modèles.
+## Users
 
-Les données, secrets, fichiers binaires, dépendances embarquées, résultats générés, wireframes, journaux et dossiers de documentation de work ont été exclus. Les dossiers `.agent` et `.agents`, les fichiers `AGENTS.md` et les métadonnées Git d’origine sont absents. Les noms susceptibles de révéler une entreprise, une personne, un client ou un système interne ont été remplacés par des noms génériques.
+| Role | Use |
+|---|---|
+| HR editor | Import interviews, review transcripts and syntheses, revise a profile and finalize a version. |
+| Reader | Consult the job profiles available to their account. |
+| Administrator | Manage local access, document settings and retention policies. |
 
-Seuls ce README et les présentations d’architecture ont un contenu explicatif : ces textes ont été entièrement rédigés pour cette version publique, sans reprendre les détails internes. L’historique Git public commence avec cette version anonymisée.
+## Main features
 
-## Fonctionnement général
+- **Audio intake.** Collect interview recordings and follow their transcription.
+- **Multi-interview synthesis.** Consolidate information from several interviews before drafting.
+- **Assisted writing.** Generate a structured draft and revise it within the application.
+- **Version history.** Keep revisions and finalized job descriptions distinct.
+- **PDF production.** Produce a document from an identified content version and template.
+- **Shared workspace.** Bring imports, processing status, editing and administration together.
 
-L’arborescence sépare les composants d’interface, les traitements applicatifs, les éléments de configuration et les tests lorsqu’ils sont présents. Le parcours général relie une interface à des traitements et à une couche de données. Les contrats, règles métier, schémas de données, intégrations et paramètres internes ne sont pas décrits.
+## Typical workflow
 
-Formats techniques représentés : Python, TypeScript, HTML, CSS, scripts shell, configuration textuelle.
+1. Create or open a job profile and import interview recordings.
+2. Review transcripts and the consolidated interview synthesis.
+3. Generate a draft, correct it and complete the HR review.
+4. Finalize a version and retrieve its corresponding PDF.
 
-La copie permet de parcourir l’organisation technique et d’identifier les familles de composants. **Elle ne permet ni d’exécuter ni de reconstruire le projet.** Les configurations et les migrations sont volontairement incomplètes et ne doivent pas être lancées.
+## Project structure
 
-## Organisation
+```text
+fiches-de-postes-rh-public-version/
+├── backend/
+│   ├── migrations/
+│   │   └── versions/
+│   ├── src/
+│   │   └── job_profiles/
+│   │       ├── api/
+│   │       ├── auth/
+│   │       ├── jobs/
+│   │       ├── module-003/
+│   │       ├── module-015/
+│   │       ├── persistence/
+│   │       └── app.py
+│   ├── tests/
+│   ├── tools/
+│   ├── pyproject.toml
+│   └── README.md
+├── deploy/
+│   ├── docker/
+│   ├── scripts/
+│   ├── tests/
+│   └── README.md
+├── docs/
+│   ├── contracts/
+│   ├── decisions/
+│   ├── design/
+│   │   ├── decisions.md
+│   │   ├── requirements.md
+│   │   └── verification.md
+│   ├── issue/
+│   │   └── README.md
+│   ├── module-013/
+│   ├── specifications/
+│   └── README.md
+├── frontend/
+│   ├── src/
+│   │   ├── api/
+│   │   ├── components/
+│   │   ├── pages/
+│   │   └── validation/
+│   ├── tests/
+│   ├── package.json
+│   └── README.md
+├── issues/
+│   ├── epics/
+│   ├── features/
+│   ├── tasks/
+│   └── README.md
+├── ARCHITECTURE.md
+└── README.md
+```
 
-- `.dockerignore`
-- `backend/`
-- `deploy/`
-- `docs/`
-- `frontend/`
-- `issues/`
+[Complete directory structure](docs/design/structure.md)
 
-Les noms `module-…` et `fichier-…` désignent des éléments renommés. Les extensions des fichiers textuels conservés indiquent leur format d’origine.
+| Area | Responsibility |
+|---|---|
+| Web interface | React editing, interview intake, progress, history and preview screens. |
+| Application API | FastAPI permissions, business operations, document versions and controlled downloads. |
+| Durable worker | Transcription, synthesis and drafting outside interactive requests. |
+| Persistence | PostgreSQL metadata and private storage for recordings and generated files. |
+| Document rendering | PDF generation separated from the AI drafting stage. |
 
-Consulter [ARCHITECTURE.md](ARCHITECTURE.md) pour la présentation générale.
+## Technology
+
+React, TypeScript, Vite, Python, FastAPI, PostgreSQL, server-side AI adapters, ReportLab and Docker.
+
+## Engineering
+
+- [Architecture](ARCHITECTURE.md)
+- [Product requirements](docs/design/requirements.md)
+- [Design decisions](docs/design/decisions.md)
+- [Verification strategy](docs/design/verification.md)
+
+Interviews and job profiles contain sensitive HR material. Access control, private file delivery and human review are central to the design.
+
+---
+
+Source code, operational configuration and project-specific data are withheld for confidentiality.
